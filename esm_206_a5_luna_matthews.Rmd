@@ -1,12 +1,12 @@
 ---
-title: '******************Assignment 5 Working Title*****************'
+title: '{******************Assignment 5 Working Title*****************}'
 author: "Anthony Luna and Elliott Matthews"
 date: "11/30/2019"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 ```{r}
