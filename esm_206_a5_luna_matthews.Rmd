@@ -3,6 +3,8 @@ title: '{******************Assignment 5 Working Title*****************}'
 author: "Anthony Luna and Elliott Matthews"
 date: "11/30/2019"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -15,11 +17,140 @@ library(janitor)
 library(broom)
 library(kableExtra)
 library(here)
+library(ggridges)
 
-m_C_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>% 
-  clean_names()
+m_c_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>% 
+  clean_names() %>% 
+  filter(species %in% c("DITE")) %>% 
+  filter(unittype %in% c("P","C","SC"))
 
 ```
 
 
-a word
+# Results 
+
+## Results A: Visually compare annual salamander counts in old growth (OG) and clear cut (CC) sections of Mack Creek.
+
+To do: Line Graph
+
+## Results B: Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
+
+To do: Table of counts using janitor::adorn_percentages(by column?) and filter out the 4th channel class: unit type. P,C,SC,{IP remove}
+
+## Results C: Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)? 
+
+To do: Using the coffee shop thing as the example $\chi^2$
+
+## Results D. Compare weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017. Only considering creek section (OG or CC) as a variable (not further factoring by channel classification), answer: Is there a significant difference in mean weights for Pacific giant salamanders observed in the two forest sections (clear cut and old growth) in 2017? 
+
+To do: 
+ x Verify normality 
+
+```{r}
+d_data <- m_c_verts %>% 
+  filter(year==2017) %>%
+  filter(weight != "NA") %>% 
+  select(section,weight)
+```
+
+
+```{r}
+# Here is a QQ-plot which demonstrates that the data 
+# does not meet the requirement for normality
+
+d_qqplot <- ggplot(data = d_data) +
+  geom_qq(aes(sample = weight)) +
+  geom_qq_line(aes(sample = weight))+
+  facet_wrap(~section,scales = "free")
+
+d_qqplot
+  
+```
+
+The distribution of salamander weights does not meet the requirements for the use of a parametric statistic, so a non-parametric test is used. The data is un-paired so Mann-Whitney U test was used.
+```{r}
+ggplot(data = d_data) +
+  geom_histogram(aes(x=weight,fill=section))+
+  facet_wrap(~section)
+```
+
+```{r}
+cc_w <- d_data %>% filter(section == "CC") %>% select(weight)
+og_w <- d_data %>% filter(section == "OG") %>% select(weight)
+
+
+cc_med <- median(cc_w$weight)
+og_med <- median(og_w$weight)
+
+d_test_raw <- wilcox.test(weight~section,d_data,paired = FALSE)
+
+d_test <- broom::tidy(d_test_raw)
+```
+
+## Results E: Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017. Pool salamander observations from both the old growth and clear cut sections for this part (i.e., you will not consider “section” as a factor here).
+
+```{r}
+e_data <- m_c_verts %>% 
+  filter(year==2017) %>%
+  filter(weight != "NA") %>% 
+  select(unittype,weight)
+
+e_mean <- e_data %>% 
+  group_by(unittype) %>% 
+  summarize(mean = mean(weight),
+            sd = sd(weight))
+```
+
+
+-	First, visually compare Pacific giant salamander weights between the three channel classifications. You can choose how to best visualize the weights between the three groups (Beeswarm? Jitter? Histogram? Density? Something else?), but you should indicate values for the mean, and standard deviation, standard error or a 95% confidence interval. Add a figure caption. 
+
+```{r}
+e_plot <- ggplot(data = e_data)+
+  geom_violin(aes(x=unittype,y=weight))+
+  geom_errorbar(data = e_mean, aes(x= unittype,ymax=mean+sd, ymin=mean-sd))+
+  geom_point(data = e_mean, aes(x=unittype,y=mean))
+
+e_plot
+```
+
+```{r}
+e_ridges <- ggplot(data = e_data)+
+  geom_density_ridges(aes(x=weight,y=unittype))
+
+e_ridges
+```
+
+
+-	Second, answer: Is there a significant difference in mean weights for Pacific giant salamanders observed in pools vs. cascades vs. side-channels in 2017? Describe the results of your statistical analysis in text, within the context of broader (and more important) measures of differences between groups (some options: means differences, effect sizes, percent differences, etc). 
+
+```{r}
+e_anova_raw <- aov(weight~unittype, data = e_data)
+
+e_anova <- broom::tidy(e_anova_raw)
+
+
+```
+
+
+-	Third, describe any concerns you have about comparing means across the groups. What might be another option to consider moving forward with the analysis? (You don’t need to actually do that here, just describe briefly in 1-2 sentences.)
+
+```{r, include=FALSE}
+e_qqplot <- ggplot(data=e_data) +
+  geom_qq(aes(sample = weight))+
+  geom_qq_line(aes(sample = weight))+
+  facet_wrap(~unittype)
+
+e_qqplot
+```
+
+
+
+
+
+
+
+
+
+
+
+
