@@ -1,0 +1,23 @@
+---
+title: '******************Assignment 5 Working Title*****************'
+author: "Anthony Luna and Elliott Matthews"
+date: "11/30/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(broom)
+library(kableExtra)
+library(here)
+
+m_C_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>% 
+  clean_names()
+
+```
+
