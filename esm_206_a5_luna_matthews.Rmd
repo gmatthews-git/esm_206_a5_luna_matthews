@@ -1,5 +1,5 @@
 ---
-title: '{******************Assignment 5 Working Title*****************}'
+title: '{******Assignment 5 Working Title****}'
 author: "Anthony Luna and Elliott Matthews"
 date: "11/30/2019"
 output: html_document
@@ -18,33 +18,109 @@ library(broom)
 library(kableExtra)
 library(here)
 library(ggridges)
+library(ggbeeswarm)
+library(scales)
+library(effsize)
 
 m_c_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>% 
   clean_names() %>% 
   filter(species %in% c("DITE")) %>% 
-  filter(unittype %in% c("P","C","SC"))
+  filter(unittype %in% c("P","C","SC"))%>% 
+  mutate(section_full = case_when(section=="CC"~"Clear cut",T~"Old growth")) %>% 
+  mutate(unittype_full = case_when(unittype == "P"~"Pool",
+                                   unittype == "SC"~"Side channel",
+                                   unittype == "C"~"Cascade"))
 
 ```
 
 
-# Results 
+## Introduction
 
-## Results A: Visually compare annual salamander counts in old growth (OG) and clear cut (CC) sections of Mack Creek.
+## Data and Methods
 
-To do: Line Graph
+## Results
 
-## Results B: Table of 2017 salamander counts by channel classification (pool, cascades and side-channel) in old growth (OG) and clear cut (CC) sections of Mack Creek.
+#### Pacific giant salamander population changes over time
 
-To do: Table of counts using janitor::adorn_percentages(by column?) and filter out the 4th channel class: unit type. P,C,SC,{IP remove}
 
-## Results C: Using the 2017 counts found in Results B above, answer: is there a significant difference in where in the channel Pacific giant salamanders are located (pool, cascade or side channel) between the two sections (old growth and clear cut)? 
+```{r, fig.cap="**Figure 1**: Old growth and clear cut regional populations tend to vary similarly, however the clear cut population is generally lower than the old growth populations."}
+giant_sal_counts <- m_c_verts %>% 
+  count(year, section_full)
 
-To do: Using the coffee shop thing as the example $\chi^2$
+giant_sal_counts %>% 
+  ggplot(aes(x = year, y = n)) +
+  geom_line(aes( group = section_full, 
+                 color = section_full),
+            size = 1.05) +
+  ggtitle("Old growth vs clear cut Pacific Giant Salamander populations ") +
+  labs(subtitle = "Timeframe: 1993 to 2017") +
+  xlab( "Year") +
+  ylab("Salamander count") +
+  scale_x_continuous(breaks = seq(1993,2017,by=4)) +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.position = c(.15, .7))
 
-## Results D. Compare weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017. Only considering creek section (OG or CC) as a variable (not further factoring by channel classification), answer: Is there a significant difference in mean weights for Pacific giant salamanders observed in the two forest sections (clear cut and old growth) in 2017? 
 
-To do: 
- x Verify normality 
+
+  
+  
+  ##### need to fix title to fit, add caption, and description
+```
+
+
+#### Pacific giant salamander population distributions in 2017
+
+```{r}
+giant_sal_2017_counts <- m_c_verts %>% 
+  filter(section %in% c("OG", "CC")) %>% 
+  filter(unittype %in% c("P", "C", "SC")) %>% 
+  filter(year == "2017") %>% 
+  count(section_full, unittype)
+
+giant_sal_2017_table <- giant_sal_2017_counts %>% 
+  pivot_wider(names_from = unittype,
+               values_from = n)
+  
+ giant_sal_2017_props <- giant_sal_2017_table %>%  
+   adorn_percentages(denominator = "row") %>% 
+   adorn_pct_formatting(digits = 1) %>% 
+   adorn_ns(position = "front")
+ 
+ kable(giant_sal_2017_props,
+       caption = "Table 1: Salamander count by location found in channel",
+       col.names = c( "Forest condition", 
+                      "Cascades", 
+                      "Pool", 
+                      "Side channel")) %>% 
+   kable_styling("striped", 
+                 full_width = F)
+ 
+
+#Fix CC and OG
+```
+
+***MOTIONING TO REMOVE THE 'RESULTS C' HEADER, AS THIS IS DIRECTLY RELATED TO TABLE 1***
+
+```{r}
+giant_sal_chi_counts <- giant_sal_2017_table %>% 
+  select(-section_full)
+
+##List H0 and Hother one
+
+giant_sal_chi <- chisq.test(giant_sal_chi_counts)
+
+
+```
+
+
+
+Based off the p value retain null hypothesis that there is no significant association between forest condition and location in channel found.
+
+
+#### Comparison of weights of Pacific giant salamanders in clear cut and old growth forest sections of the creek in 2017.
+
 
 ```{r}
 d_data <- m_c_verts %>% 
@@ -55,39 +131,23 @@ d_data <- m_c_verts %>%
 
 
 ```{r}
-# Here is a QQ-plot which demonstrates that the data 
-# does not meet the requirement for normality
-
-d_qqplot <- ggplot(data = d_data) +
-  geom_qq(aes(sample = weight)) +
-  geom_qq_line(aes(sample = weight))+
-  facet_wrap(~section,scales = "free")
-
-d_qqplot
-  
-```
-
-The distribution of salamander weights does not meet the requirements for the use of a parametric statistic, so a non-parametric test is used. The data is un-paired so Mann-Whitney U test was used.
-```{r}
-ggplot(data = d_data) +
-  geom_histogram(aes(x=weight,fill=section))+
-  facet_wrap(~section)
-```
-
-```{r}
 cc_w <- d_data %>% filter(section == "CC") %>% select(weight)
 og_w <- d_data %>% filter(section == "OG") %>% select(weight)
 
 
-cc_med <- median(cc_w$weight)
-og_med <- median(og_w$weight)
+cc_mean <- round(mean(cc_w$weight), digits = 3)
+og_mean <- round(mean(og_w$weight), digits = 3)
 
-d_test_raw <- wilcox.test(weight~section,d_data,paired = FALSE)
+d_test_raw <- t.test(weight~section,d_data,paired = FALSE)
 
 d_test <- broom::tidy(d_test_raw)
+
+d_pctdiff <- scales::percent(abs(d_test$estimate1 - d_test$estimate2)/mean(c(d_test$estimate1,d_test$estimate2)))
 ```
 
-## Results E: Compare weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017. Pool salamander observations from both the old growth and clear cut sections for this part (i.e., you will not consider “section” as a factor here).
+Populations found in clear cut and old growth sections of the creek showed a statistically significant diffence in mean weights (p = `r round(d_test$p.value,digits=3)`, $\alpha$ = 0.05). The percent difference between the mean weights is `r d_pctdiff` (Clear cut mean = `r cc_mean` g, Old growth mean = `r og_mean` g).
+
+#### Comparison of weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
 ```{r}
 e_data <- m_c_verts %>% 
@@ -101,9 +161,6 @@ e_mean <- e_data %>%
             sd = sd(weight))
 ```
 
-
--	First, visually compare Pacific giant salamander weights between the three channel classifications. You can choose how to best visualize the weights between the three groups (Beeswarm? Jitter? Histogram? Density? Something else?), but you should indicate values for the mean, and standard deviation, standard error or a 95% confidence interval. Add a figure caption. 
-
 ```{r}
 e_plot <- ggplot(data = e_data)+
   geom_violin(aes(x=unittype,y=weight))+
@@ -114,37 +171,20 @@ e_plot
 ```
 
 ```{r}
-e_ridges <- ggplot(data = e_data)+
-  geom_density_ridges(aes(x=weight,y=unittype))
-
-e_ridges
-```
-
-
--	Second, answer: Is there a significant difference in mean weights for Pacific giant salamanders observed in pools vs. cascades vs. side-channels in 2017? Describe the results of your statistical analysis in text, within the context of broader (and more important) measures of differences between groups (some options: means differences, effect sizes, percent differences, etc). 
-
-```{r}
 e_anova_raw <- aov(weight~unittype, data = e_data)
 
 e_anova <- broom::tidy(e_anova_raw)
 
-
+c_p_cohen <- cohen.d(weight~unittype, data=e_data %>% filter(unittype != "SC"))
+p_sc_cohen <- cohen.d(weight~unittype, data=e_data %>% filter(unittype != "C"))
+c_sc_cohen <- cohen.d(weight~unittype, data=e_data %>% filter(unittype != "P"))
 ```
 
+There is a statistically significant difference between the three channel classifications (p = `r round(e_anova$p.value[1], digits = 3)`). A pairwise comparison of the effective size (Cohen's d) was found to be negligible when comparing cascales and pools ($d=$ `r round(c_p_cohen$estimate,digits=3)`), and small when comparing side channels to pools ($d=$ `r round(p_sc_cohen$estimate,digits=3)`), and side channels to cascades ($d=$ `r round(c_sc_cohen$estimate,digits=3)`). Dispite this statistical difference, it is difficult to determine which channel classifications have differences without post-hoc testing. Further analysis using a pairwise comparison of channel classifications, such as Tukey's Honest Significant Difference, could be used to determine which groups have a statistically significant differences.
 
--	Third, describe any concerns you have about comparing means across the groups. What might be another option to consider moving forward with the analysis? (You don’t need to actually do that here, just describe briefly in 1-2 sentences.)
+## Summary
 
-```{r, include=FALSE}
-e_qqplot <- ggplot(data=e_data) +
-  geom_qq(aes(sample = weight))+
-  geom_qq_line(aes(sample = weight))+
-  facet_wrap(~unittype)
-
-e_qqplot
-```
-
-
-
+## References
 
 
 
