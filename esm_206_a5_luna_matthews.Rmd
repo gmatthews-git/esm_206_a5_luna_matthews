@@ -36,7 +36,12 @@ m_c_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>%
 
 ## Introduction
 
+
+
+
 Since inauguration by the US Forest Service in 1948, H.J. Andrews Experimental Forest has proved an incredibly valuable research asset. {website citation}. Countless studies have been completed spanning topics anywhere from logging hydrology to spotted owl demography. {website citation}. More recent research examples include monitoring vertebrate populations native to Mack Creek {figure 2}.  Using this vertebrate data, the impact of clear cutting old growth forests may have on Pacific Giant Salamanders (Dicamptodon tenebrosus) is explored. {maybe mention something on at risk status based on habitat loss if we can find a source}
+
+
 ```{r}
 knitr::include_graphics("pacific_giant_sal.jpg")
 ```
@@ -44,7 +49,9 @@ knitr::include_graphics("pacific_giant_sal.jpg")
 Figure 1: Pacific Giant Salamander ( Dicamptodon tenebrosus) in its natural habitat.
 
 ## Data and Methods
-
+```{r}
+knitr::include_graphics("mack_creek_map.png")
+```
 ## Results
 
 A.
@@ -135,7 +142,7 @@ B.
 
 ####2017 Counts by Classification
 
-Next, 2017 salamander counts grouped by catch location were analyzed and demonstrated that in both clear cut and old growth forest sections, cascades hold the majority of salamander populations followed by side channels and pools respectively. The results presented in Table 1 were then further examined using a chi squared test to determine if forest condition had a significant effect on salamander catch location.  No significant association was found through testing (chi-square test, p =0.0626)
+Next, 2017 salamander counts grouped by catch location were analyzed and demonstrated that in both clear cut and old growth forest sections, cascades hold the majority of salamander populations followed by side channels and pools respectively. The results presented in Table 1 were then further examined using a chi squared test to determine if forest condition had a significant effect on salamander catch location.  No significant association was found through testing (chi-square test, p = `r round(giant_sal_chi$p.value,digits=3)`)
 
 
 Based off the p value retain null hypothesis that there is no significant association between forest condition and location in channel found.
@@ -208,8 +215,11 @@ There is a statistically significant difference between mean weights of salamand
 
 ## References
 
+Introduction website source --------- https://andrewsforest.oregonstate.edu/about/history
 
+Sal picture source------- File:Dicamptodon tenebrosus 2.JPG. (2019, June 14). Wikimedia Commons, the free media repository. Retrieved 00:25, December 3, 2019 from https://commons.wikimedia.org/w/index.php?title=File:Dicamptodon_tenebrosus_2.JPG&oldid=354477061.
 
+Map source --------------Source: Characterizing short-term light dynamics in forested headwater streams - Scientific Figure on ResearchGate. Available from: https://www.researchgate.net/figure/Map-of-study-sites-and-the-HJ-Andrews-Experimental-forest-HJA-Each-dot-represents-a_fig1_314206020 [accessed 3 Dec, 2019]
 
 
 
