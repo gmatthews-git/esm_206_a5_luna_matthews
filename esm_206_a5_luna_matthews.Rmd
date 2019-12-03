@@ -235,7 +235,7 @@ When considering mean weight differences by channel classification, an analysis 
 
 ## Summary
 
-Forrest conditions appears to have an effect on the total population of the Pacific giant salamander at Mack creek, but this does not appear to significantly effect what channels are most used. With regard to weights of the Pacific giant salamander, there is not a significant difference based on forest condition, however there appears to be a non-negligible significant difference between the mean weights in the channel classifications. Further pairwise comparisons for each channel are required to determine which of the channel classifications show statistically significant differences in weight.
+Forest condition appears to have an effect on the total population of the Pacific Giant Salamander at Mack Creek, but does not significantly affect channel catch location. For both forest conditions, cascades housed between 60 to 70% of salamander populations with side channels and pools holding the remainder (Table 1).  With regard to weights, there is not a significant difference based on forest condition, however there appears to be a non-negligible significant difference between the mean weights in the channel classifications. Further pairwise comparisons for each channel are required to determine which of the channel classifications show statistically significant differences in weight.
 
 ## References
 
