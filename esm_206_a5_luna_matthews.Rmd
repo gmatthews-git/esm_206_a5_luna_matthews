@@ -89,7 +89,7 @@ giant_sal_2017_table <- giant_sal_2017_counts %>%
    adorn_ns(position = "front")
  
  kable(giant_sal_2017_props,
-       caption = "Table 1: Salamander count by location found in channel",
+       caption = "Table 1: Salamander count by location found in channel (2017)",
        col.names = c( "Forest condition", 
                       "Cascades", 
                       "Pool", 
