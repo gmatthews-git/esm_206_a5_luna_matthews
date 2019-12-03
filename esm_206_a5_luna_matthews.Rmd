@@ -22,8 +22,7 @@ to do:
   Omit: "based off the p value" sentence directly above Table 1
   Fill color for viloin plot, maybe?
   Omit: alpha = 0.5 in comp of weight section since it is mentioned in data and methods section previously
-  Citations: should pic ones go at bottom?
-  Mack creek needs citation
+  Citations: should salamander pic one go at bottom?
   
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
