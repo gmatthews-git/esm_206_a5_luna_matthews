@@ -6,24 +6,8 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-to do:
-  x fix the section headers
-  x fix the figure 1(3) and the legend title
-  x add anova to data and methods
-  x Citations throughout
-  x italicize scientific names
-  x figure 4 aesthetics and captions
-  * general wording and spell check
-  x title
-  * Summary
-  
-  Elliott Notes:
-  Summary should be bullets
-  Omit: "based off the p value" sentence directly above Table 1
-  Fill color for viloin plot, maybe?
-  Omit: alpha = 0.5 in comp of weight section since it is mentioned in data and methods section previously
-  Citations: should salamander pic one go at bottom?
-  
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
@@ -152,7 +136,6 @@ giant_sal_chi <- chisq.test(giant_sal_chi_counts)
 ```
 Next, 2017 salamander counts grouped by catch location were analyzed and demonstrated that in both clear cut and old growth forest sections, cascades hold the majority of salamander populations followed by side channels and pools respectively. The results presented in Table 1 were then further examined using a chi squared test to determine if forest condition had a significant effect on salamander catch location.  No significant association was found through testing (chi-square test, p = `r round(giant_sal_chi$p.value,digits=3)`)
 
-Based off the p value retain null hypothesis that there is no significant association between forest condition and location in channel found.
 ```{r}
 prop_table
 ```
@@ -189,7 +172,7 @@ d_test <- broom::tidy(d_test_raw)
 d_cc_og <- cohen.d(weight~section_full, data=d_data)
 ```
 
-Populations found in clear cut and old growth sections of the creek demonstrated statistically significant differences in mean weights (p = `r round(d_test$p.value,digits=3)`, $\alpha$ = 0.05), however comparison of the effective size (Cohen's d) was found to be negligible when comparing salamander weights in clear cut and old growth sections (d = `r round(d_cc_og$estimate,digits=3)`, Clear cut mean = `r cc_mean` g, Old growth mean = `r og_mean` g).
+Populations found in clear cut and old growth sections of the creek demonstrated statistically significant differences in mean weights (p = `r round(d_test$p.value,digits=3)`), however comparison of the effective size (Cohen's d) was found to be negligible when comparing salamander weights in clear cut and old growth sections (d = `r round(d_cc_og$estimate,digits=3)`, Clear cut mean = `r cc_mean` g, Old growth mean = `r og_mean` g).
 
 
 ```{r}
