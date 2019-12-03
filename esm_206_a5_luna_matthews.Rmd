@@ -39,24 +39,20 @@ m_c_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>%
 Since inauguration by the US Forest Service in 1948, H.J. Andrews Experimental Forest has proved an incredibly valuable research asset. {website citation}. Countless studies have been completed spanning topics from logging hydrology to spotted owl demography. {website citation}. More recent research examples include monitoring vertebrate populations native to Mack Creek (Figure 2).  Using vertebrate data from this research, the potential impact of forest condition may have on Pacific Giant Salamanders (Dicamptodon tenebrosus) is explored. {maybe mention something on at risk status based on habitat loss if we can find a source}
 
 
-```{r}
+```{r out.width = "65%", out.height = "70%", fig.align = 'center', fig.cap = "**Figure 1:**Pacific Giant Salamander ( Dicamptodon tenebrosus) in its natural habitat."}
 knitr::include_graphics("pacific_giant_sal.jpg")
 ```
 
-Figure 1: Pacific Giant Salamander ( Dicamptodon tenebrosus) in its natural habitat.
+
 
 ## Data and Methods
 
 Provided by Andrews Forest LTER Site, the weight and abundance data are part of an aquatic vertebrate population study and monitoring program conducted by Oregon State University. Though the program’s inception dates back to 1987, Pacific Giant Salamanders have only been monitored since 1993{site metadata}.  Initial analysis entails, salamander population counts grouped annually based on the type of forest section (old growth or clear cut) they were observed and is visualized via line graph. Next the scope narrows to salamanders observed in 2017 in order to construct a table illustrating salamander catch location (cascades, pool, side channel) that reflects relative percentage to total population of old growth and clear-cut forest sections along Mack Creek.  A chi-square test was then performed for insight about forest condition and its potential effect on salamander location. Finally, mean weights are grouped by forest condition and catch location and then compared via two sample t-test (Welch's t-test, $\alpha = 0.05$) and violin plot respectively. All analyses and figures were prepared using R software version 3.6.1.
 
 
-```{r}
+```{r out.width="50%", out.height="50%", fig.align='center', fig.cap= "**Figure 2:** Map of Mack Creek"}
 knitr::include_graphics("mack_creek_map.png")
 ```
-
-
-
-**Figure 2:** Map of Mack Creek
 
 
 ## Results
@@ -96,7 +92,7 @@ giant_sal_counts %>%
 
   
   
-  ##### need to fix title to fit, add caption, and description
+  ##### need to fix title legend title.  Caption text looks funky with fig
 ```
 
 
@@ -221,7 +217,7 @@ There is a statistically significant difference between mean weights of salamand
 ## Summary
 
 ## References
-
+ { ############ need to be cleaned #######################}
 Introduction website source --------- https://andrewsforest.oregonstate.edu/about/history
 
 Sal picture source------- File:Dicamptodon tenebrosus 2.JPG. (2019, June 14). Wikimedia Commons, the free media repository. Retrieved 00:25, December 3, 2019 from https://commons.wikimedia.org/w/index.php?title=File:Dicamptodon_tenebrosus_2.JPG&oldid=354477061.
