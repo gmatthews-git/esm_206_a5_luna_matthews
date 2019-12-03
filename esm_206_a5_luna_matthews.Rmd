@@ -36,9 +36,25 @@ m_c_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>%
 
 ## Introduction
 
+Since inauguration by the US Forest Service in 1948, H.J. Andrews Experimental Forest has proved an incredibly valuable research asset. {website citation}. Countless studies have been completed spanning topics anywhere from logging hydrology to spotted owl demography. {website citation}. More recent research examples include monitoring vertebrate populations native to Mack Creek {figure 2}.  Using this vertebrate data, the impact of clear cutting old growth forests may have on Pacific Giant Salamanders (Dicamptodon tenebrosus) is explored. {maybe mention something on at risk status based on habitat loss if we can find a source}
+```{r}
+knitr::include_graphics("pacific_giant_sal.jpg")
+```
+
+Figure 1: Pacific Giant Salamander ( Dicamptodon tenebrosus) in its natural habitat.
+
 ## Data and Methods
 
 ## Results
+
+A.
+
+####Annual salamander counts in old growth vs clear cut forests.
+
+Two major trends are shown by plotting the annual count of salamanders observed in old growth vs clear cut sections. First, over the majority of years observed, old growth salamander populations exceeded clear cut forest populations. The exceptions to this are seen in 1993 and 1994 at the start of data collection followed by 2015 to 2017 samples where clear cut salamanders exhibit higher counts.
+
+Second, both plots mirror each other’s general trend. In other words, an increase in one population for a given year typically saw a similar response by the other population.
+
 
 #### Pacific giant salamander population changes over time
 
@@ -98,12 +114,13 @@ giant_sal_2017_table <- giant_sal_2017_counts %>%
                  full_width = F)
  
 
-#Fix CC and OG
+
 ```
 
-***MOTIONING TO REMOVE THE 'RESULTS C' HEADER, AS THIS IS DIRECTLY RELATED TO TABLE 1***
 
 ```{r}
+# Exploring if forest condition has a significant effect on salamander catch location via chi squared test.
+
 giant_sal_chi_counts <- giant_sal_2017_table %>% 
   select(-section_full)
 
@@ -114,6 +131,11 @@ giant_sal_chi <- chisq.test(giant_sal_chi_counts)
 
 ```
 
+B.
+
+####2017 Counts by Classification
+
+Next, 2017 salamander counts grouped by catch location were analyzed and demonstrated that in both clear cut and old growth forest sections, cascades hold the majority of salamander populations followed by side channels and pools respectively. The results presented in Table 1 were then further examined using a chi squared test to determine if forest condition had a significant effect on salamander catch location.  No significant association was found through testing (chi-square test, p =0.0626)
 
 
 Based off the p value retain null hypothesis that there is no significant association between forest condition and location in channel found.
@@ -145,7 +167,7 @@ d_test <- broom::tidy(d_test_raw)
 d_pctdiff <- scales::percent(abs(d_test$estimate1 - d_test$estimate2)/mean(c(d_test$estimate1,d_test$estimate2)))
 ```
 
-Populations found in clear cut and old growth sections of the creek showed a statistically significant diffence in mean weights (p = `r round(d_test$p.value,digits=3)`, $\alpha$ = 0.05). The percent difference between the mean weights is `r d_pctdiff` (Clear cut mean = `r cc_mean` g, Old growth mean = `r og_mean` g).
+Populations found in clear cut and old growth sections of the creek emonstrated statistically significant differences in mean weights (p = `r round(d_test$p.value,digits=3)`, $\alpha$ = 0.05). The percent difference between the mean weights is `r d_pctdiff` (Clear cut mean = `r cc_mean` g, Old growth mean = `r og_mean` g).
 
 #### Comparison of weights of Pacific giant salamanders in pools, cascades and side-channels of Mack Creek in 2017.
 
@@ -180,7 +202,7 @@ p_sc_cohen <- cohen.d(weight~unittype, data=e_data %>% filter(unittype != "C"))
 c_sc_cohen <- cohen.d(weight~unittype, data=e_data %>% filter(unittype != "P"))
 ```
 
-There is a statistically significant difference between the three channel classifications (p = `r round(e_anova$p.value[1], digits = 3)`). A pairwise comparison of the effective size (Cohen's d) was found to be negligible when comparing cascales and pools ($d=$ `r round(c_p_cohen$estimate,digits=3)`), and small when comparing side channels to pools ($d=$ `r round(p_sc_cohen$estimate,digits=3)`), and side channels to cascades ($d=$ `r round(c_sc_cohen$estimate,digits=3)`). Dispite this statistical difference, it is difficult to determine which channel classifications have differences without post-hoc testing. Further analysis using a pairwise comparison of channel classifications, such as Tukey's Honest Significant Difference, could be used to determine which groups have a statistically significant differences.
+There is a statistically significant difference between mean weights of salamanders in the three channel classifications (p = `r round(e_anova$p.value[1], digits = 3)`). A pairwise comparison of the effective size (Cohen's d) was found to be negligible when comparing cascades and pools ($d=$ `r round(c_p_cohen$estimate,digits=3)`), and small when comparing side channels to pools ($d=$ `r round(p_sc_cohen$estimate,digits=3)`), and side channels to cascades ($d=$ `r round(c_sc_cohen$estimate,digits=3)`). Despite this statistical difference, it is difficult to determine which channel classifications have differences without post-hoc testing. Further analysis using a pairwise comparison of channel classifications, such as Tukey's Honest Significant Difference, could be used to determine which groups exhibit statistically significant differences.
 
 ## Summary
 
