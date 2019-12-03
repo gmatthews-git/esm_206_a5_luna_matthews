@@ -17,6 +17,14 @@ to do:
   x title
   * Summary
   
+  Elliott Notes:
+  Summary should be bullets
+  Omit: "based off the p value" sentence directly above Table 1
+  Fill color for viloin plot, maybe?
+  Omit: alpha = 0.5 in comp of weight section since it is mentioned in data and methods section previously
+  Citations: should pic ones go at bottom?
+  Mack creek needs citation
+  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
@@ -46,7 +54,7 @@ m_c_verts <- read_csv(here::here("data","mack_creek_vertebrates.csv")) %>%
 
 ## Introduction
 
-Since inauguration by the US Forest Service in 1948, H.J. Andrews Experimental Forest has proved an incredibly valuable research asset.  Countless studies have been completed spanning topics from logging hydrology to spotted owl demography [1]. More recent research examples include monitoring vertebrate populations native to Mack Creek (Figure 2). Habitat loss with relation to the local aquatic life is an important research point for this location due to the uncertainty of its effects. Using vertebrate data from this research, the potential impact of forest condition may have on Pacific Giant Salamanders (*Dicamptodon tenebrosus*) is explored.
+Since inauguration by the US Forest Service in 1948, H.J. Andrews Experimental Forest has proved an incredibly valuable research asset.  Countless studies have been completed spanning topics from logging hydrology to spotted owl demography [1]. More recent research examples include monitoring vertebrate populations native to Mack Creek (Figure 2). Habitat loss with relation to the local aquatic life is an important research point for this location due to the uncertainty of its effects. Using vertebrate data from this research, the potential impact forest condition may have on Pacific Giant Salamanders (*Dicamptodon tenebrosus*) is explored.
 
 
 ```{r out.width = "65%", out.height = "70%", fig.align = 'center', fig.cap = "**Figure 1:**Pacific Giant Salamander (*Dicamptodon tenebrosus*) in its natural habitat. Credit: [Wikimedia Commons, the free media repository. 12/3/19](https://commons.wikimedia.org/w/index.php?title=File:Dicamptodon_tenebrosus_2.JPG&oldid=354477061)"}
@@ -82,7 +90,7 @@ giant_sal_counts %>%
                  color = section_full),
             size = 1.05) +
   ggtitle("Old growth vs clear cut Pacific Giant Salamander populations ") +
-  labs(subtitle = "Timeframe: 1993 to 2017",col="Section") +
+  labs(subtitle = "Timeframe: 1993 to 2017",col="Forest condition") +
   xlab( "Year") +
   ylab("Salamander count") +
   scale_x_continuous(breaks = seq(1993,2017,by=4)) +
